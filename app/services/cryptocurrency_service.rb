@@ -58,29 +58,29 @@ class CryptocurrencyService
 
   def self.get_current_price(symbol, options = {})
     force_refresh = options[:force_refresh] || false
-    
+
     # First check if we have a cached price (unless force refresh)
     unless force_refresh
       cached_price = Rails.cache.read("crypto_price:#{symbol}")
       return cached_price if cached_price.present?
     end
-    
+
     # If force refresh or not in cache, try to get from database
     coin = Coin.find_by(symbol: symbol.upcase)
-    
+
     # If force refresh and coin exists, fetch latest price
     if force_refresh && coin.present?
       begin
         # Try to get fresh data for this specific coin
         latest_price = fetch_latest_price_for_symbol(symbol)
-        
+
         # Update coin if got fresh data
         if latest_price.present?
           coin.update(
             current_price: latest_price,
             last_updated: Time.current
           )
-          
+
           # Cache the fresh price
           Rails.cache.write("crypto_price:#{symbol}", latest_price, expires_in: 2.minutes)
           return latest_price
@@ -89,46 +89,46 @@ class CryptocurrencyService
         Rails.logger.error "Error refreshing price for #{symbol}: #{e.message}"
       end
     end
-    
+
     # Use existing database price if available
     if coin&.current_price.present?
       # Cache the price from the database
       Rails.cache.write("crypto_price:#{symbol}", coin.current_price, expires_in: 2.minutes)
       return coin.current_price
     end
-    
+
     # If not in database, fallback to static data
     fallback_coin = fallback_cryptocurrencies.find { |c| c[:symbol] == symbol.upcase }
     price = fallback_coin ? fallback_coin[:current_price] : nil
-    
+
     # Cache the price if found
     Rails.cache.write("crypto_price:#{symbol}", price, expires_in: 2.minutes) if price.present?
-    
+
     price
   end
 
   def self.fetch_latest_price_for_symbol(symbol)
     # In a real application, this would make a targeted API call for a specific coin
     # Example API endpoint: https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd
-    
+
     begin
       # Make a simulated API call
       uri = URI("https://api.coingecko.com/api/v3/simple/price")
       params = { ids: symbol.downcase, vs_currencies: "usd" }
       uri.query = URI.encode_www_form(params)
-      
+
       response = Net::HTTP.get_response(uri)
-      
+
       if response.is_a?(Net::HTTPSuccess)
         data = JSON.parse(response.body)
         return data[symbol.downcase]["usd"] if data[symbol.downcase].present?
       end
-      
+
       # Fallback to the list if single coin API failed
       top_coins = fetch_top_cryptocurrencies
       coin_data = top_coins.find { |c| c[:symbol] == symbol.upcase }
       return coin_data[:current_price] if coin_data.present?
-      
+
       nil
     rescue => e
       Rails.logger.error "Error fetching latest price for #{symbol}: #{e.message}"

@@ -47,9 +47,9 @@ class PortfolioSummaryQuery
   def calculate_distribution(portfolio_data = nil)
     portfolio_data ||= @portfolio_query.call
     total = calculate_total_value(portfolio_data)
-    
+
     return {} if total.zero?
-    
+
     portfolio_data.values.each_with_object({}) do |asset, result|
       percentage = (asset[:total_value] / total) * 100
       result[asset[:symbol]] = {
@@ -62,22 +62,22 @@ class PortfolioSummaryQuery
 
   def calculate_total_profit_loss(portfolio_data = nil)
     portfolio_data ||= @portfolio_query.call
-    
+
     if portfolio_data.empty?
       return {
         absolute: 0,
         percentage: 0
       }
     end
-    
+
     total_current_value = portfolio_data.values.sum { |asset| asset[:total_value] }
     total_purchase_value = portfolio_data.values.sum do |asset|
       asset[:avg_purchase_price] * asset[:total_quantity]
     end
-    
+
     absolute_profit_loss = total_current_value - total_purchase_value
     percentage = total_purchase_value.zero? ? 0 : (absolute_profit_loss / total_purchase_value) * 100
-    
+
     {
       absolute: absolute_profit_loss,
       percentage: percentage
@@ -111,4 +111,4 @@ class PortfolioSummaryQuery
         }
       end
   end
-end 
+end

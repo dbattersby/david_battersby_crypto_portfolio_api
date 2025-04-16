@@ -29,13 +29,13 @@ RSpec.describe "Api::V1::Auths", type: :request do
       expect(response).to have_http_status(:success)
       expect(JSON.parse(response.body)).to include("message" => "Logged in successfully")
     end
-    
+
     it "returns error with invalid credentials" do
       post "/api/v1/auth/login", params: invalid_login_params, headers: json_headers, as: :json
       expect(response).to have_http_status(:unauthorized)
     end
   end
-  
+
   describe "DELETE /auth/logout" do
     it "logs out a user" do
       delete "/api/v1/auth/logout", headers: jwt_headers

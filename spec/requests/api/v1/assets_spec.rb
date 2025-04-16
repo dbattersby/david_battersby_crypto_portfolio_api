@@ -21,8 +21,8 @@ RSpec.describe "Api::V1::Assets", type: :request do
 
   describe "POST /api/v1/assets" do
     it "returns http success" do
-      asset_params = { 
-        asset: { 
+      asset_params = {
+        asset: {
           name: "Bitcoin",
           symbol: "BTC",
           quantity: 1.0,
@@ -36,8 +36,8 @@ RSpec.describe "Api::V1::Assets", type: :request do
 
   describe "PATCH /api/v1/assets/:id" do
     it "returns http success" do
-      asset_params = { 
-        asset: { 
+      asset_params = {
+        asset: {
           quantity: 2.0,
           purchase_price: 45000.0
         }

@@ -1,6 +1,6 @@
 class Transaction < ApplicationRecord
   TYPES = { buy: "buy", sell: "sell" }.freeze
-  
+
   belongs_to :user
   belongs_to :asset
 

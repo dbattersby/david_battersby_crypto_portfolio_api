@@ -3,16 +3,16 @@
 module Users
   class RegistrationsController < Devise::RegistrationsController
     respond_to :json, :html
-    before_action :set_minimum_password_length, only: [:new]
-    skip_before_action :require_no_authentication, only: [:new, :create]
+    before_action :set_minimum_password_length, only: [ :new ]
+    skip_before_action :require_no_authentication, only: [ :new, :create ]
     # skip_before_action :authenticate_scope!, only: [:new, :create]
-    before_action :configure_sign_up_params, only: [:create]
-    before_action :set_page_title, only: [:new]
+    before_action :configure_sign_up_params, only: [ :create ]
+    before_action :set_page_title, only: [ :new ]
 
     # GET /resource/sign_up
     def new
       self.resource = resource_class.new
-      render layout: 'application'
+      render layout: "application"
     end
 
     # POST /resource
@@ -27,7 +27,7 @@ module Users
           sign_up(resource_name, resource)
           respond_to do |format|
             format.html { redirect_to portfolio_path }
-            format.json { render json: { status: { code: 200, message: 'Signed up successfully.' },
+            format.json { render json: { status: { code: 200, message: "Signed up successfully." },
                           data: UserSerializer.new(resource).serializable_hash[:data][:attributes] }, status: :ok }
           end
         else
@@ -43,7 +43,7 @@ module Users
         set_minimum_password_length
         respond_to do |format|
           format.html { render :new, status: :unprocessable_entity }
-          format.json { render json: { status: { message: "User couldn't be created successfully. #{resource.errors.full_messages.to_sentence}" } }, 
+          format.json { render json: { status: { message: "User couldn't be created successfully. #{resource.errors.full_messages.to_sentence}" } },
                         status: :unprocessable_entity }
         end
       end
@@ -77,7 +77,7 @@ module Users
 
     # If you have extra params to permit, append them to the sanitizer.
     def configure_sign_up_params
-      devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
+      devise_parameter_sanitizer.permit(:sign_up, keys: [ :name ])
     end
 
     # If you have extra params to permit, append them to the sanitizer.

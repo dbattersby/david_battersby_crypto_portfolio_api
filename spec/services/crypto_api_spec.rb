@@ -18,21 +18,21 @@ RSpec.describe CryptoApi do
 
     it "reads from cache if price is available" do
       allow(Rails.cache).to receive(:read).with("crypto_price:#{symbol}").and_return(price)
-      
+
       expect(CryptoApi.get_price(symbol)).to eq(price)
       expect(CryptocurrencyService).not_to have_received(:get_current_price)
     end
 
     it "writes to cache when fetching a fresh price" do
       CryptoApi.get_price(symbol)
-      
+
       expect(Rails.cache).to have_received(:write)
         .with("crypto_price:#{symbol}", price, expires_in: CryptoApi::CACHE_EXPIRY)
     end
   end
 
   describe ".get_prices" do
-    let(:symbols) { ["btc", "eth"] }
+    let(:symbols) { [ "btc", "eth" ] }
     let(:prices) { { "btc" => 30000.0, "eth" => 2000.0 } }
 
     before do
@@ -46,16 +46,16 @@ RSpec.describe CryptoApi do
 
     it "returns prices for multiple symbols" do
       result = CryptoApi.get_prices(symbols)
-      
+
       expect(result["btc"]).to eq(30000.0)
       expect(result["eth"]).to eq(2000.0)
     end
 
     it "uses cache for symbols that are cached" do
       allow(Rails.cache).to receive(:read).with("crypto_price:btc").and_return(prices["btc"])
-      
+
       CryptoApi.get_prices(symbols)
-      
+
       # Should only call get_current_price for eth, not btc
       expect(CryptocurrencyService).to have_received(:get_current_price).with("eth")
       expect(CryptocurrencyService).not_to have_received(:get_current_price).with("btc")
@@ -73,16 +73,16 @@ RSpec.describe CryptoApi do
 
     it "forces a refresh from CryptocurrencyService" do
       CryptoApi.refresh_price(symbol)
-      
+
       expect(CryptocurrencyService).to have_received(:get_current_price)
         .with(symbol, force_refresh: true)
     end
 
     it "updates the cache with the new price" do
       CryptoApi.refresh_price(symbol)
-      
+
       expect(Rails.cache).to have_received(:write)
         .with("crypto_price:#{symbol}", price, expires_in: CryptoApi::CACHE_EXPIRY)
     end
   end
-end 
+end

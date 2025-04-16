@@ -47,14 +47,14 @@ class PortfolioController < ApplicationController
     # Get all transactions for this asset
     if symbol.present?
       @asset = Asset.find_by(symbol: symbol)
-      
+
       # If asset is found, get its transactions
       if @asset.present?
         @transactions = Transaction.where(asset: @asset, user: current_user).order(created_at: :desc)
-        
+
         # Get asset details through PortfolioAssetsQuery for profit/loss calculation
         @asset_details = PortfolioAssetsQuery.new(current_user).get_asset(symbol)
-        
+
         # If no asset details, create minimal details
         if @asset_details.blank?
           current_price = CryptoApi.get_price(symbol)
@@ -66,7 +66,7 @@ class PortfolioController < ApplicationController
             profit_loss: 0 # Default when we can't calculate
           }
         end
-        
+
         @asset_symbol = symbol
       end
     else
@@ -131,7 +131,7 @@ class PortfolioController < ApplicationController
   def create_sell
     @asset_symbol = params[:symbol]
     result = TransactionCreatorQuery.new(current_user, params).create_sell
-    
+
     if result[:success]
       redirect_to portfolio_path
     else
@@ -172,14 +172,14 @@ class PortfolioController < ApplicationController
     end
 
     # For sell transactions, ensure we don't exceed available quantity
-    if transaction.transaction_type == 'sell' && new_quantity > original_quantity
+    if transaction.transaction_type == "sell" && new_quantity > original_quantity
       flash[:alert] = "You cannot increase the quantity of a sell transaction"
       redirect_to edit_transaction_portfolio_path(transaction)
       return
     end
 
     # Update the asset quantity based on the transaction change
-    if transaction.transaction_type == 'buy'
+    if transaction.transaction_type == "buy"
       # For buy transactions, adjust the asset quantity by the difference
       quantity_diff = new_quantity - original_quantity
       new_asset_quantity = asset.quantity + quantity_diff

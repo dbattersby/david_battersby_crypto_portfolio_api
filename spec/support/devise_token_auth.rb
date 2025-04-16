@@ -9,4 +9,4 @@ end
 
 RSpec.configure do |config|
   config.include DeviseTokenAuthHelper, type: :request
-end 
+end

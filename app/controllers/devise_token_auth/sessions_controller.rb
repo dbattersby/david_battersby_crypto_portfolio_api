@@ -6,13 +6,13 @@ module DeviseTokenAuth
 
     def create
       Rails.logger.debug "Sign in attempt with email: #{params[:email]}"
-      
+
       @resource = User.find_by(email: params[:email])
       Rails.logger.debug "User found: #{@resource.present?}"
-      
+
       if @resource && @resource.valid_password?(params[:password])
         Rails.logger.debug "Password valid, signing in user"
-        
+
         # Create and store token for API requests
         @client_id = SecureRandom.urlsafe_base64(nil, false)
         @token = @resource.create_token(client_id: @client_id)
@@ -27,7 +27,7 @@ module DeviseTokenAuth
         redirect_to portfolio_path
       else
         Rails.logger.debug "Invalid email or password"
-        flash[:alert] = 'Invalid email or password'
+        flash[:alert] = "Invalid email or password"
         render :new, status: :unprocessable_entity
       end
     end
@@ -37,7 +37,7 @@ module DeviseTokenAuth
         # Clear tokens
         current_user.tokens = {}
         current_user.save!
-        
+
         # Sign out with Devise
         sign_out(current_user)
       end
@@ -47,7 +47,7 @@ module DeviseTokenAuth
     private
 
     def client_id
-      @client_id ||= request.headers['client'] || cookies.signed[:client_id]
+      @client_id ||= request.headers["client"] || cookies.signed[:client_id]
     end
   end
-end 
+end

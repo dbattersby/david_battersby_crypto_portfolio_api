@@ -1,15 +1,15 @@
 module Api
   module V1
     class AuthController < BaseController
-      skip_before_action :authenticate_user!, only: [:signup, :login]
+      skip_before_action :authenticate_user!, only: [ :signup, :login ]
 
       def signup
         user = User.new(user_params)
 
         if user.save
           sign_in(user)
-          render json: { 
-            user: user.as_json(only: [:id, :email, :name]),
+          render json: {
+            user: user.as_json(only: [ :id, :email, :name ]),
             message: "User registered successfully"
           }, status: :created
         else
@@ -22,8 +22,8 @@ module Api
 
         if user&.valid_password?(params[:password])
           sign_in(user)
-          render json: { 
-            user: user.as_json(only: [:id, :email, :name]),
+          render json: {
+            user: user.as_json(only: [ :id, :email, :name ]),
             message: "Logged in successfully"
           }
         else

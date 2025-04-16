@@ -25,7 +25,7 @@ class TransactionCreator
         quantity: quantity,
         purchase_price: price
       )
-      
+
       unless asset.save
         return { success: false, errors: asset.errors.full_messages, asset: asset }
       end
@@ -47,19 +47,19 @@ class TransactionCreator
       { success: false, errors: transaction.errors.full_messages, asset: asset }
     end
   end
-  
+
   def self.create_sell(user, asset_symbol, quantity_to_sell, price)
     # Find assets with this symbol
     assets = user.assets.where(symbol: asset_symbol).order(created_at: :asc)
     total_available = assets.sum(:quantity)
-    
+
     if quantity_to_sell > total_available
-      return { 
-        success: false, 
-        errors: ["Cannot sell more than you own (#{total_available} available)"]
+      return {
+        success: false,
+        errors: [ "Cannot sell more than you own (#{total_available} available)" ]
       }
     end
-    
+
     # Process the sell transaction using FIFO method (First In, First Out)
     remaining_to_sell = quantity_to_sell
     processed_assets = []
@@ -67,12 +67,12 @@ class TransactionCreator
 
     assets.each do |asset|
       break if remaining_to_sell <= 0
-      
+
       if asset.quantity <= remaining_to_sell
         # Sell the entire asset
         sell_quantity = asset.quantity
         remaining_to_sell -= sell_quantity
-        
+
         # Create a sell transaction
         transaction = Transaction.create(
           user_id: user.id,
@@ -81,17 +81,17 @@ class TransactionCreator
           quantity: sell_quantity,
           price: price
         )
-        
+
         # Update the asset quantity to zero
         asset.update(quantity: 0)
-        
+
         processed_assets << asset.id
         transactions << transaction
       else
         # Sell part of the asset
         sell_quantity = remaining_to_sell
         new_quantity = asset.quantity - sell_quantity
-        
+
         # Create a sell transaction
         transaction = Transaction.create(
           user_id: user.id,
@@ -109,12 +109,12 @@ class TransactionCreator
         remaining_to_sell = 0
       end
     end
-    
-    { 
+
+    {
       success: true,
       quantity_sold: quantity_to_sell,
       assets: processed_assets,
       transactions: transactions
     }
   end
-end 
+end

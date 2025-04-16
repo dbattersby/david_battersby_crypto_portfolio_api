@@ -23,7 +23,7 @@ class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[7.2]
       t.boolean :allow_password_change, default: false
     end
 
-    add_index :users, [:uid, :provider], unique: true
+    add_index :users, [ :uid, :provider ], unique: true
     add_index :users, :confirmation_token, unique: true
   end
 end

@@ -5,11 +5,11 @@ FactoryBot.define do
     transaction_type { "buy" }
     quantity { 1.0 }
     price { 20000.0 }
-    
+
     trait :buy do
       transaction_type { "buy" }
     end
-    
+
     trait :sell do
       transaction_type { "sell" }
     end

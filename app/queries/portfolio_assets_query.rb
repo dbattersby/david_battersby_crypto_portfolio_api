@@ -12,7 +12,7 @@ class PortfolioAssetsQuery
 
     # Get all unique symbols for batch price fetch
     symbols = grouped_assets.keys
-    
+
     # Fetch all prices at once
     prices = CryptoApi.get_prices(symbols)
 
@@ -23,19 +23,19 @@ class PortfolioAssetsQuery
       total_value = 0
       purchase_price = 0
       current_price = prices[symbol]
-      
+
       # Skip if no price available
       next unless current_price
 
       assets.each do |asset|
         total_quantity += asset.quantity
-        
+
         # Skip assets with zero quantity
         next if asset.quantity.zero?
-        
+
         asset_value = asset.quantity * current_price
         total_value += asset_value
-        
+
         # Calculate weighted contribution to purchase price
         purchase_price += (asset.purchase_price * asset.quantity)
       end
@@ -45,10 +45,10 @@ class PortfolioAssetsQuery
 
       # Calculate the weighted average purchase price
       avg_purchase_price = purchase_price / total_quantity
-      
+
       # Calculate profit/loss
       profit_loss = ((current_price - avg_purchase_price) / avg_purchase_price) * 100
-      
+
       result[symbol] = {
         symbol: symbol,
         name: assets.first.name,
@@ -71,22 +71,22 @@ class PortfolioAssetsQuery
     # For a single asset, we can optimize by not fetching all prices
     assets = user.assets.where(symbol: symbol)
     return {} if assets.empty?
-    
+
     total_quantity = assets.sum(:quantity)
     return {} if total_quantity.zero?
-    
+
     # Get current price
     current_price = CryptoApi.get_price(symbol)
-    
+
     return {} unless current_price
-    
+
     # Calculate weighted average purchase price
     purchase_price = assets.sum { |asset| asset.purchase_price * asset.quantity } / total_quantity
-    
+
     # Calculate total value and profit/loss
     total_value = total_quantity * current_price
     profit_loss = ((current_price - purchase_price) / purchase_price) * 100
-    
+
     {
       symbol: symbol,
       name: assets.first.name,
@@ -97,4 +97,4 @@ class PortfolioAssetsQuery
       profit_loss: profit_loss
     }
   end
-end 
+end

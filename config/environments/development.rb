@@ -90,5 +90,5 @@ Rails.application.configure do
   config.assets.compile = true
 
   # Precompile additional assets
-  config.assets.precompile += %w( controllers/application.js controllers/index.js )
+  config.assets.precompile += %w[ controllers/application.js controllers/index.js ]
 end

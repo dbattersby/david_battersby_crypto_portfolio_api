@@ -1,7 +1,7 @@
 module Api
   module V1
     class AssetsController < BaseController
-      before_action :set_asset, only: [:show, :update, :destroy, :value]
+      before_action :set_asset, only: [ :show, :update, :destroy, :value ]
 
       def index
         @assets = current_user.assets
@@ -14,7 +14,7 @@ module Api
 
       def create
         @asset = current_user.assets.new(asset_params)
-        
+
         if @asset.save
           render json: @asset, status: :created
         else
@@ -38,7 +38,7 @@ module Api
       def value
         # You would likely call an external API here to get the current value
         current_value = @asset.quantity * (rand(10000..20000) / 100.0) # Example calculation
-        render json: { 
+        render json: {
           symbol: @asset.symbol,
           quantity: @asset.quantity,
           purchase_price: @asset.purchase_price,

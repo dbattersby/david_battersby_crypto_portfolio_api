@@ -15,29 +15,29 @@ class Asset < ApplicationRecord
   # Add quantity with proper weighted average price calculation
   def add_quantity(quantity_to_add, price)
     return false if quantity_to_add <= 0
-    
+
     # Calculate new weighted average purchase price
     total_value_before = self.quantity * (self.purchase_price || 0)
     new_value = quantity_to_add * price
     total_quantity = self.quantity + quantity_to_add
     weighted_avg_price = (total_value_before + new_value) / total_quantity
-    
+
     # Update asset
     self.quantity = total_quantity
     self.purchase_price = weighted_avg_price
     save
   end
-  
+
   # Sell quantity with validation
   def sell_quantity(quantity_to_sell)
     return false if quantity_to_sell <= 0
     return false if quantity_to_sell > self.quantity
-    
+
     # Update asset with new quantity
     self.quantity -= quantity_to_sell
     save
   end
-  
+
   # Check if there's enough quantity to sell
   def has_sufficient_quantity?(quantity_to_check)
     self.quantity >= quantity_to_check
