@@ -1,0 +1,20 @@
+<header>
+  <div class="header-container">
+    <h1><%= page_title %></h1>
+
+    <nav class="auth-links">
+      <% if user_signed_in? %>
+        <div class="user-links">
+          <%= link_to "My Portfolio", portfolio_path, class: "nav-link" %> |
+          <a href="#" data-action="logout" class="nav-link">Sign Out</a>
+        </div>
+      <% else %>
+        <div class="user-links">
+          <%= link_to "Home", root_path, class: "nav-link" %>
+          <%= link_to "Sign Up", signup_path, class: "nav-link" %>
+          <%= link_to "Log In", login_path, class: "nav-link" %>
+        </div>
+      <% end %>
+    </nav>
+  </div>
+</header> 

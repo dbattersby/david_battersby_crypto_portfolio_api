@@ -1,0 +1,72 @@
+<div class="asset-form-container">
+  <p class="form-description">Add more <%= @asset_symbol %> to your portfolio by entering the quantity and purchase price.</p>
+
+  <%= form_with(model: @asset, url: add_transaction_portfolio_path, local: true, class: "asset-form") do |form| %>
+    <% if @asset.errors.any? %>
+      <div id="error_explanation" class="alert alert-danger">
+        <h2><%= pluralize(@asset.errors.count, "error") %> prohibited this asset from being saved:</h2>
+        <ul>
+          <% @asset.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= form.hidden_field :symbol %>
+    <%= form.hidden_field :name %>
+
+    <% if @selected_crypto.present? %>
+      <div class="asset-info">
+        <h3><%= @selected_crypto[:name] %> (<%= @selected_crypto[:symbol] %>)</h3>
+        <p>Current Price: <%= number_to_currency(@selected_crypto[:current_price], precision: 2) %></p>
+      </div>
+    <% else %>
+      <div class="asset-info">
+        <h3><%= @asset.name %> (<%= @asset.symbol %>)</h3>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= form.label :quantity, "Quantity" %>
+      <%= form.text_field :quantity, class: "form-control", required: true %>
+      <small class="form-text text-muted">Enter the amount you want to add to your portfolio</small>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :initial_purchase_price, "Purchase Price (USD)" %>
+      <%= form.text_field :initial_purchase_price, value: @selected_crypto&.dig(:current_price), class: "form-control", required: true %>
+      <small class="form-text text-muted">Enter the price per unit for this purchase</small>
+    </div>
+
+    <div id="current-price-info" class="price-info">
+      <p>Estimated Value: <span id="estimated-value">$0.00</span></p>
+    </div>
+
+    <div class="form-actions">
+      <%= form.submit "Add to Portfolio", class: "btn btn-primary" %>
+      <%= link_to "Cancel", portfolio_transactions_path(symbol: @asset_symbol), class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const quantityField = document.getElementById('asset_quantity');
+    const purchasePriceField = document.getElementById('asset_initial_purchase_price');
+    const estimatedValueDisplay = document.getElementById('estimated-value');
+    
+    function updateEstimatedValue() {
+      const quantity = parseFloat(quantityField.value) || 0;
+      const price = parseFloat(purchasePriceField.value) || 0;
+      const estimatedValue = quantity * price;
+      estimatedValueDisplay.textContent = '$' + estimatedValue.toFixed(2);
+    }
+    
+    quantityField.addEventListener('input', updateEstimatedValue);
+    purchasePriceField.addEventListener('input', updateEstimatedValue);
+    
+    // Initial calculation
+    updateEstimatedValue();
+  });
+</script> 

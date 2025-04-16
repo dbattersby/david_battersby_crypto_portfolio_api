@@ -1,0 +1,51 @@
+<div class="portfolio-actions">
+  <%= link_to "Add New", new_portfolio_path, class: "btn btn-primary" %>
+</div>
+
+<% if @portfolio_assets.empty? %>
+  <div class="no-assets-message">
+    <p>You don't have any assets in your portfolio yet. Add your first asset to get started!</p>
+  </div>
+<% else %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th width="20%">Name</th>
+        <th width="15%">Quantity</th>
+        <th width="15%">Price</th>
+        <th width="15%">Total Value</th>
+        <th width="15%">Profit/Loss</th>
+        <th width="20%">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @portfolio_assets.each do |asset| %>
+        <tr>
+          <td>
+            <strong><%= asset[:name] %></strong> (<%= asset[:symbol] %>)
+          </td>
+          <td><%= number_with_precision(asset[:total_quantity], precision: 2) %></td>
+          <td><%= number_to_currency(asset[:current_price], precision: 2) %></td>
+          <td><%= number_to_currency(asset[:total_value], precision: 2) %></td>
+          <td class="<%= asset[:profit_loss] >= 0 ? 'positive-change' : 'negative-change' %>">
+            <%= number_with_precision(asset[:profit_loss], precision: 2) %>%
+          </td>
+          <td>
+            <div class="action-buttons">
+              <%= link_to "View", portfolio_transactions_path(symbol: asset[:symbol]), class: "btn btn-sm btn-outline-primary" %>
+              <%= link_to "Buy", add_more_portfolio_path(symbol: asset[:symbol]), class: "btn btn-sm btn-success" %>
+              <%= link_to "Sell", sell_portfolio_path(symbol: asset[:symbol]), class: "btn btn-sm btn-danger" %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<div class="portfolio-summary">
+  <p class="total-value">Total Value: $<%= number_with_precision(@total_value, precision: 2, delimiter: ',') %></p>
+  <p class="data-source">
+    <small>Price data sourced from CoinGecko.</small>
+  </p>
+</div>

@@ -1,0 +1,551 @@
+body {
+  font-family: sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 20px;
+  color: #333;
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+h1 {
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 30px;
+  font-family: 'Inter', sans-serif;
+}
+.auth-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+.auth-link {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+.auth-link:hover {
+  background-color: #2980b9;
+}
+.description {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 5px;
+  margin-bottom: 30px;
+}
+.api-info {
+  margin-top: 30px;
+}
+.api-info h2 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+.api-info ul {
+  list-style-type: none;
+  padding: 0;
+}
+.api-info li {
+  margin-bottom: 10px;
+  padding-left: 20px;
+  position: relative;
+}
+.api-info li:before {
+  content: "•";
+  color: #3498db;
+  position: absolute;
+  left: 0;
+}
+.user-links {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.user-links a {
+  color: #3498db;
+  text-decoration: none;
+  margin: 0 10px;
+}
+.user-links a:hover {
+  text-decoration: underline;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.table th,
+.table td {
+  padding: 10px;
+}
+
+.table th {
+  background-color: #f8f9fa;
+}
+
+// striped rows
+.table td:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+// hover effect
+.table td:hover {
+  background-color: #f8f9fa;
+}
+
+/* Asset form styles */
+.asset-form-container {
+  max-width: 600px;
+  margin: 20px auto;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #333;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-control:focus {
+  border-color: #3498db;
+  outline: none;
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+.form-text {
+  margin-top: 5px;
+  font-size: 12px;
+  color: #666;
+}
+
+.form-actions {
+  margin-top: 30px;
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+  background-color: #3498db;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #2980b9;
+}
+
+.btn-secondary {
+  background-color: #95a5a6;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #7f8c8d;
+}
+
+/* Portfolio styles */
+.portfolio-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.portfolio-summary {
+  text-align: right;
+}
+
+.total-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.table th,
+.table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.table th {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+.table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.positive-change {
+  color: #28a745;
+}
+
+.negative-change {
+  color: #dc3545;
+}
+
+/* Transaction styles */
+.transactions-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.transactions-header .action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.transactions-header .btn {
+  font-weight: 500;
+}
+
+.transactions-container {
+  margin-top: 20px;
+}
+
+.transactions-container h2 {
+  margin-bottom: 5px;
+  color: #2c3e50;
+}
+
+.asset-details h3 {
+  color: #2c3e50;
+  margin: 30px 0 15px;
+}
+
+.asset-summary .detail-item {
+  display: inline-block;
+  margin-right: 2em;
+}
+
+.back-link {
+  margin-bottom: 20px;
+}
+
+.transaction-table {
+  margin-top: 20px;
+}
+
+.buy-transaction {
+  background-color: rgba(40, 167, 69, 0.05);
+}
+
+.sell-transaction {
+  background-color: rgba(220, 53, 69, 0.05);
+}
+
+.transaction-type span {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+.transaction-type.buy span {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.transaction-type.sell span {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.transaction-link {
+  color: #3498db;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.transaction-link:hover {
+  text-decoration: underline;
+}
+
+/* Asset-info styles */
+.asset-info {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  border-left: 4px solid #3498db;
+}
+
+.asset-info h3 {
+  margin: 0;
+  color: #2c3e50;
+}
+
+.asset-info p {
+  margin: 0;
+  color: #7f8c8d;
+}
+
+.asset-details {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+/* Action button styles */
+.table .action-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.btn-outline-primary {
+  color: #3498db;
+  border: 1px solid #3498db;
+  background-color: transparent;
+}
+
+.btn-outline-primary:hover {
+  background-color: #3498db;
+  color: white;
+}
+
+.btn-sm {
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 3px;
+  min-width: 50px;
+  text-align: center;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c0392b;
+}
+
+/* Add spacing between table cells */
+.table td, .table th {
+  padding: 12px 8px;
+  vertical-align: middle;
+}
+
+.price-updated {
+  font-size: 0.8em;
+  color: #6c757d;
+  margin-top: 3px;
+}
+
+.data-source {
+  text-align: right;
+  color: #6c757d;
+  margin-top: 10px;
+  font-size: 0.85em;
+}
+
+.text-muted {
+  color: #6c757d;
+}
+
+/* Form improvements */
+.input-group {
+  display: flex;
+  align-items: center;
+}
+
+.input-group-prepend {
+  display: flex;
+  align-items: center;
+}
+
+.input-group-text {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-right: none;
+  border-radius: 4px 0 0 4px;
+}
+
+.input-group .form-control {
+  border-radius: 0 4px 4px 0;
+}
+
+.btn-outline-secondary {
+  background-color: transparent;
+  border: 1px solid #95a5a6;
+  color: #95a5a6;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #95a5a6;
+  color: white;
+}
+
+/* Transaction actions */
+.action-buttons {
+  display: flex;
+  gap: 5px;
+}
+
+form.inline-delete {
+  display: inline-block;
+  margin-left: 5px;
+}
+
+/* Add more styles as needed */
+
+/* Auth Pages Container */
+.auth-container {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 30px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Page Title */
+.auth-title {
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* Form Fields */
+.auth-container .field {
+  margin-bottom: 1em;
+  display: block;
+}
+
+.auth-container .field input {
+  display: block;
+  width: 100%;
+  padding: 0.5em;
+  border-radius: 0.25em;
+  border: 1px solid #e2e8f0;
+}
+
+.auth-container .field label {
+  display: block;
+  margin-bottom: 0;
+  color: #4a5568;
+  font-weight: 500;
+}
+
+/* Links Section */
+.auth-container .links {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.auth-container .links a {
+  color: #4299e1;
+  text-decoration: none;
+  font-size: 14px;
+  margin: 0 10px;
+  transition: color 0.2s ease;
+}
+
+.auth-links a:hover {
+  color: #3182ce;
+  text-decoration: underline;
+}
+
+/* Flash Messages */
+.flash {
+  padding: 12px 16px;
+  margin-bottom: 24px;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.flash.notice {
+  background-color: #c6f6d5;
+  color: #2f855a;
+  border: 1px solid #9ae6b4;
+}
+
+.flash.alert {
+  background-color: #fed7d7;
+  color: #c53030;
+  border: 1px solid #feb2b2;
+}
+
+/* Password Requirements */
+.password-requirements {
+  font-size: 12px;
+  color: #718096;
+  margin-top: 4px;
+}
+
+/* Error Messages */
+.field_with_errors input {
+  border-color: #fc8181;
+}
+
+.error-message {
+  color: #e53e3e;
+  font-size: 12px;
+  margin-top: 4px;
+}

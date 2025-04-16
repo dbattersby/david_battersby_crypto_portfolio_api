@@ -1,0 +1,23 @@
+<div class="auth-container">
+  <h2 class="auth-title">Sign in</h2>
+
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name), method: :post) do |f| %>
+    <div class="auth-field">
+      <%= f.label :email %>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    </div>
+
+    <div class="auth-field">
+      <%= f.label :password %>
+      <%= f.password_field :password, autocomplete: "current-password" %>
+    </div>
+
+    <div class="auth-submit">
+      <%= f.submit "Sign in", class: "auth-submit" %>
+    </div>
+  <% end %>
+
+  <div class="auth-links">
+    <%= render "devise_token_auth/shared/links" %>
+  </div>
+</div> 

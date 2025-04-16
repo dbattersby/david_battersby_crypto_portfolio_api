@@ -1,0 +1,72 @@
+<h1><%= @page_title %></h1>
+
+<div class="asset-form-container">
+  <p class="form-description">Update your <%= @transaction.transaction_type %> transaction for <%= @asset_symbol %>.</p>
+
+  <div class="asset-info">
+    <h3><%= @asset.name %> (<%= @asset_symbol %>)</h3>
+    <p>Transaction Type: <span class="transaction-type <%= @transaction.transaction_type %>"><%= @transaction.transaction_type.upcase %></span></p>
+    <p>Current Price: $<%= number_with_precision(@current_price, precision: 2) %></p>
+    <p>Transaction Date: <%= @transaction.created_at.strftime('%b %d, %Y %H:%M') %></p>
+  </div>
+
+  <%= form_with(url: update_transaction_portfolio_path(@transaction), method: :put, local: true, authenticity_token: true, html: { class: "asset-form" }) do %>
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+    <div class="form-group">
+      <label for="transaction_quantity">Quantity</label>
+        <%= number_field_tag 'transaction[quantity]', @transaction.quantity, class: "form-control", step: "0.00000001", min: "0.00000001", required: true, id: "transaction-quantity" %>
+
+        <small class="form-text text-muted">
+          Original quantity: <%= number_with_precision(@transaction.quantity, precision: 8) %>.
+        
+          <% if @transaction.transaction_type == 'sell' %>
+            You cannot increase the quantity of a sell transaction.
+          <% end %>
+        </small>
+      </div>
+
+    <div class="form-group">
+      <label for="transaction_price">Price ($)</label>
+      <%= number_field_tag 'transaction[price]', @transaction.price, step: "0.00000001", min: "0.00000001", class: "form-control", required: true, id: "transaction-price" %>
+      <small class="form-text text-muted">Original price: $<%= number_with_precision(@transaction.price, precision: 2) %></small>
+    </div>
+
+    <div class="form-group">
+      <label>Total Value</label>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">$</span>
+        </div>
+        <input type="text" readonly class="form-control" id="total-value">
+      </div>
+      <small class="form-text text-muted">Original total: $<%= number_with_precision(@transaction.quantity * @transaction.price, precision: 2) %></small>
+    </div>
+
+    <div class="form-actions">
+      <%= submit_tag "Update Transaction", class: "btn btn-primary" %>
+      <%= link_to "Cancel", portfolio_transactions_path(symbol: @asset_symbol), class: "btn btn-outline-secondary" %>
+    </div>
+  <% end %>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const quantityField = document.getElementById('transaction-quantity');
+    const priceField = document.getElementById('transaction-price');
+    const totalValueField = document.getElementById('total-value');
+    
+    function updateTotalValue() {
+      const quantity = parseFloat(quantityField.value) || 0;
+      const price = parseFloat(priceField.value) || 0;
+      const totalValue = quantity * price;
+      
+      totalValueField.value = totalValue.toFixed(2);
+    }
+    
+    quantityField.addEventListener('input', updateTotalValue);
+    priceField.addEventListener('input', updateTotalValue);
+    
+    // Initialize on page load
+    updateTotalValue();
+  });
+</script> 

@@ -1,0 +1,31 @@
+<div class="auth-container" data-controller="auth">
+  <% if flash[:alert] %>
+    <div class="alert"><%= flash[:alert] %></div>
+  <% end %>
+
+  <% if flash[:notice] %>
+    <div class="notice"><%= flash[:notice] %></div>
+  <% end %>
+
+  <div id="error-message" class="alert" style="display: none;" data-auth-target="error"></div>
+
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { 'data-auth-target': 'form', 'data-action': 'submit->auth#login' }) do |f| %>
+    <div class="field">
+      <%= f.label :email %>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", 'data-auth-target': 'email' %>
+    </div>
+
+    <div class="field">
+      <%= f.label :password %>
+      <%= f.password_field :password, autocomplete: "current-password", 'data-auth-target': 'password' %>
+    </div>
+
+    <div class="actions">
+      <%= f.submit "Sign in", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+
+  <div class="links">
+    <%= render "users/shared/links" %>
+  </div>
+</div>

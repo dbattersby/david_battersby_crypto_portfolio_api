@@ -1,0 +1,65 @@
+<h1><%= @page_title %></h1>
+
+<div class="asset-form-container">
+  <p class="form-description">Sell <%= @asset_symbol %> from your portfolio.</p>
+
+  <div class="asset-info">
+    <h3><%= @asset_name %> (<%= @asset_symbol %>)</h3>
+    <p>Current Price: $<%= number_with_precision(@current_price, precision: 2) %></p>
+    <p>Available: <%= number_with_precision(@total_quantity, precision: 8) %> <%= @asset_symbol %></p>
+    <p>Total Value: $<%= number_with_precision(@total_quantity * @current_price, precision: 2) %></p>
+  </div>
+
+  <%= form_with(model: @transaction, url: create_sell_portfolio_path, local: true, class: "asset-form") do |form| %>
+    <%= hidden_field_tag :symbol, @asset_symbol %>
+
+    <div class="form-group">
+      <%= form.label :quantity, "Quantity to Sell" %>
+      <%= form.number_field :quantity, class: "form-control", step: "0.00000001", min: "0.00000001", max: @total_quantity, required: true, id: "sell-quantity" %>
+      <small class="form-text text-muted">Maximum available: <%= number_with_precision(@total_quantity, precision: 8) %></small>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :price, "Sell Price ($)" %>
+      <%= form.number_field :price, class: "form-control", step: "0.00000001", min: "0.0000001", value: @current_price, required: true, id: "sell-price" %>
+      <small class="form-text text-muted">Current market price: $<%= number_with_precision(@current_price, precision: 2) %></small>
+    </div>
+
+    <div class="form-group">
+      <label>Estimated Proceeds</label>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">$</span>
+        </div>
+        <input type="text" readonly class="form-control" id="estimated-value">
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <%= form.submit "Sell Asset", class: "btn btn-danger" %>
+      <%= link_to "Cancel", portfolio_path, class: "btn btn-outline-secondary" %>
+    </div>
+  <% end %>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const sellQuantityField = document.getElementById('sell-quantity');
+    const sellPriceField = document.getElementById('sell-price');
+    const estimatedValueField = document.getElementById('estimated-value');
+    
+    function updateEstimatedValue() {
+      const quantity = parseFloat(sellQuantityField.value) || 0;
+      const price = parseFloat(sellPriceField.value) || 0;
+      const estimatedValue = quantity * price;
+      
+      estimatedValueField.value = estimatedValue.toFixed(2);
+    }
+    
+    sellQuantityField.addEventListener('input', updateEstimatedValue);
+    sellPriceField.addEventListener('input', updateEstimatedValue);
+    
+    // Initialize on page load
+    updateEstimatedValue();
+  });
+</script> 

@@ -1,0 +1,36 @@
+<div class="auth-container" data-controller="auth">
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { 'data-auth-target': 'form', 'data-action': 'submit->auth#signup' }) do |f| %>
+    <div class="field">
+      <%= f.label :name %>
+      <%= f.text_field :name, autofocus: true, 'data-auth-target': 'name' %>
+    </div>
+
+    <div class="field">
+      <%= f.label :email %>
+      <%= f.email_field :email, autocomplete: "email", 'data-auth-target': 'email' %>
+    </div>
+
+    <div class="field">
+      <%= f.label :password %>
+      <% if @minimum_password_length %>
+      <em>(<%= @minimum_password_length %> characters minimum)</em>
+      <% else %>
+      <em>(6 characters minimum)</em>
+      <% end %>
+      <%= f.password_field :password, autocomplete: "new-password", 'data-auth-target': 'password' %>
+    </div>
+
+    <div class="field">
+      <%= f.label :password_confirmation %>
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", 'data-auth-target': 'passwordConfirmation' %>
+    </div>
+
+    <div class="field">
+      <%= f.submit "Sign up", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+
+  <div class="links">
+    <%= render "users/shared/links" %>
+  </div>
+</div>

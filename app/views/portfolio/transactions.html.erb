@@ -1,0 +1,84 @@
+<h1><%= @page_title %></h1>
+
+<div class="transactions-header">
+  <div class="action-buttons">
+    <%= link_to "← Back to Portfolio", portfolio_path, class: "btn btn-secondary" %>
+  </div>
+  <% if @asset_symbol.present? %>
+  <div class="action-buttons">
+    <%= link_to "Buy #{@asset_symbol}", add_more_portfolio_path(symbol: @asset_symbol), class: "btn btn-success" %>
+    <%= link_to "Sell #{@asset_symbol}", sell_portfolio_path(symbol: @asset_symbol), class: "btn btn-danger" %>
+  </div>
+  <% end %>
+</div>
+
+<% if @asset_details.present? %>
+<div class="asset-summary">
+  <h2><%= @asset_details[:name] %> (<%= @asset_symbol %>)</h2>
+  <div class="asset-details">
+    <div class="detail-item">
+      <span class="label">Current Price:</span> 
+      <span class="value"><strong><%= number_to_currency(@asset_details[:current_price], precision: 2) %></strong></span>
+    </div>
+    <div class="detail-item">
+      <span class="label">Total Value:</span>
+      <span class="value"><strong><%= number_to_currency(@asset_details[:total_value], precision: 2) %></strong></span>
+    </div>
+    <div class="detail-item">
+      <span class="label">Profit/Loss:</span>
+      <span class="value <%= @asset_details[:profit_loss] && @asset_details[:profit_loss] >= 0 ? 'positive-change' : 'negative-change' %>">
+        <%= number_with_precision(@asset_details[:profit_loss], precision: 2) %>%
+      </span>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<div class="transactions-container">  
+  <% if @transactions.blank? %>
+    <div class="no-transactions-message">
+      <p>No transactions found<%= @asset_symbol.present? ? " for #{@asset_symbol}" : "" %>.</p>
+    </div>
+  <% else %>
+    <table class="table transaction-table">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Total</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @transactions.each do |transaction| %>
+          <tr class="<%= transaction.transaction_type %>-transaction">
+            <td class="transaction-type <%= transaction.transaction_type %>">
+              <span><%= transaction.transaction_type.upcase %></span>
+            </td>
+            <td><%= number_with_precision(transaction.quantity, precision: 2) %></td>
+            <td>$<%= number_with_precision(transaction.price, precision: 2) %></td>
+            <td>$<%= number_with_precision(transaction.quantity * transaction.price, precision: 2) %></td>
+            <td><%= transaction.created_at.strftime('%b %d, %Y %H:%M') %></td>
+            <td>
+              <%= link_to "Edit", edit_transaction_portfolio_path(transaction), class: "btn btn-sm btn-primary" %>
+              
+              <%= button_to "Delete", 
+                delete_transaction_portfolio_path(transaction),
+                method: :delete,
+                form: { 
+                  data: { turbo_confirm: "Are you sure?" }, 
+                  style: "display: inline-block;"
+                },
+                class: "btn btn-sm btn-danger", 
+                style: "display: inline-block; margin-left: 5px;"
+              %> 
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <p>Showing <%= pluralize(@transactions.size, "transaction") %></p>
+  <% end %>
+</div> 
